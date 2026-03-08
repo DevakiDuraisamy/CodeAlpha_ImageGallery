@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ExploreScape – Travel Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #0f172a;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #020617, #020617);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      color: var(--accent);
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filters button {
+      padding: 0.6rem 1.4rem;
+      border-radius: 25px;
+      border: none;
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .filters button:hover,
+    .filters button.active {
+      background: var(--accent);
+      color: #020617;
+    }
+
+    /* Gallery Grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+      padding: 0 2rem 3rem;
+    }
+
+    .image-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--card);
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .image-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(56,189,248,0.25);
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease, filter 0.6s ease;
+    }
+
+    .image-card:hover img {
+      transform: scale(1.12);
+      filter: brightness(0.85);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.2rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .image-card:hover .overlay {
+      opacity: 1;
+    }
+
+    .overlay h3 {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 16px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+    }
+
+    .close {
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ExploreScape 🌍</h1>
+  <p>An aesthetic travel & places image gallery</p>
+</header>
+
+<div class="filters">
+  <button class="active" data-filter="all">All</button>
+  <button data-filter="nature">Nature</button>
+  <button data-filter="city">City</button>
+  <button data-filter="beach">Beach</button>
+  <button data-filter="mountain">Mountain</button>
+</div>
+
+<section class="gallery">
+  <div class="image-card" data-category="nature">
+    <img src="https://picsum.photos/id/1018/600/400">
+    <div class="overlay"><h3>Green Valley</h3></div>
+  </div>
+
+  <div class="image-card" data-category="city">
+    <img src="https://picsum.photos/id/1015/600/400">
+    <div class="overlay"><h3>City Lights</h3></div>
+  </div>
+
+  <div class="image-card" data-category="beach">
+    <img src="https://picsum.photos/id/1011/600/400">
+    <div class="overlay"><h3>Beach Sunset</h3></div>
+  </div>
+
+  <div class="image-card" data-category="mountain">
+    <img src="https://picsum.photos/id/1002/600/400">
+    <div class="overlay"><h3>Mountain Peaks</h3></div>
+  </div>
+
+  <div class="image-card" data-category="nature">
+    <img src="https://picsum.photos/id/1039/600/400">
+    <div class="overlay"><h3>Forest Trail</h3></div>
+  </div>
+
+  <div class="image-card" data-category="city">
+    <img src="https://picsum.photos/id/1043/600/400">
+    <div class="overlay"><h3>Urban Motion</h3></div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="close">×</button>
+  <img id="lightbox-img">
+</div>
+
+<script>
+  const cards = document.querySelectorAll('.image-card');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.querySelector('.close');
+  const filterBtns = document.querySelectorAll('.filters button');
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      lightboxImg.src = card.querySelector('img').src;
+      lightbox.classList.add('active');
+    });
+  });
+
+  closeBtn.onclick = () => lightbox.classList.remove('active');
+
+  lightbox.onclick = e => {
+    if (e.target === lightbox) lightbox.classList.remove('active');
+  };
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      cards.forEach(card => {
+        card.style.display =
+          filter === 'all' || card.dataset.category === filter
+            ? 'block'
+            : 'none';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
